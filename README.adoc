@@ -1,0 +1,39 @@
+== Xataface oauth_token Module
+
+This is a pluggable authentication module for Xataface to allow logging into a Xataface application using an Oauth token.  This is useful if you have a client application that has already logged into an OAuth service (such as Facebook or Twitter), and needs to access your Xataface service.  With this plugin installed, Xataface will look for an HTTP header `xf-{SERVICENAME}-oauth-token` and validate it against th corresponding oauth service.
+
+=== Installation
+
+1. Install the https://github.com/shannah/xataface-module-oauth[Xataface oauth module]
+2. Download this module (oauth_token) and copy it into your app's `modules/Auth` directory, so that the oauth_token.php file is found at:
++
+`modules/Auth/oauth_token/oauth_token.php`
+3. Add `pre_auth_types=oauth_token` to the `[_auth]` section of your conf.ini file.  E.g.
++
+[source,ini]
+----
+[_auth]
+    users_table=users
+    username_column=username
+    password_column=password
+    pre_auth_types=oauth_token
+----
+4. Add a section to your conf.ini file named `[oauth_SERVICENAME]` where "SERVICE_NAME" is the name of oauth service.  E.g. For Facebook, you might name this `[oauth_facebook]`.  This section should include at least `client_id` and `client_secret` properties.  E.g.:
++
+[source,ini]
+----
+[oauth_facebook]
+    client_id=XXXXXXXXXXXX
+    client_secret=aXXXXXXXXXXXXXX
+    autocreate=1   ; Optional flag to auto-create user accounts
+----
+
+
+=== Usage
+
+Add the `XF-FACEBOOK-OAUTH-ACCESS-TOKEN` HTTP header to HTTP requests to your Xataface app to automatically log the user in.  This assumes that whatever service is making the HTTP request has already successfully logged into the Oauth service and has obtained an access token.
+
+== Links
+
+. https://github.com/shannah/xataface[Xataface]
+. https://github.com/shannah/xataface-module-oauth[Xataface oauth module]
